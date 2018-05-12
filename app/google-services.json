@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "635007105725",
+    "firebase_url": "https://cityzenapp-1526135598591.firebaseio.com",
+    "project_id": "cityzenapp-1526135598591",
+    "storage_bucket": "cityzenapp-1526135598591.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635007105725:android:e84736ccee46fcdc",
+        "android_client_info": {
+          "package_name": "nyc.c4q.cityzenapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635007105725-c33k6eqqhpptnhfaldi1jklltrdr8qnj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nyc.c4q.cityzenapp",
+            "certificate_hash": "a922abf24a6d364f082fad9f97f0732722396e83"
+          }
+        },
+        {
+          "client_id": "635007105725-ge3476qm4n9tl4orjv2rijnju03uf933.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU0Njy0cwjFo72sNT4ryzTW8ObArs2K-8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635007105725-ge3476qm4n9tl4orjv2rijnju03uf933.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
