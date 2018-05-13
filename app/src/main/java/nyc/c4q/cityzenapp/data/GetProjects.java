@@ -10,17 +10,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class Projects {
+import java.util.ArrayList;
+import java.util.List;
+
+import nyc.c4q.cityzenapp.model.Project;
+
+public class GetProjects {
     private final static String TAG = "PROJECTS";
+    private List<Project> projectList = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference projects = db.collection("projects");
 
-    public Projects getInstance() {
-        return this;
-
-    }
-
-    public void getProjects() {
+    public void getProjectsList() {
         db.collection("projects")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -28,13 +28,29 @@ public class Projects {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                Project project = new Project();
+                                project.setImg(document.get("img").toString());
+                                Log.d(TAG, document.get("img").toString());
+                                project.setName(document.get("name").toString());
+                                projectList.add(project);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
+                            populateList(projectList);
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
+
                 });
+    }
+
+    private void populateList(List<Project> projects) {
+        this.projectList = projects;
+    }
+
+    public List<Project> getPopulatedList(){
+        return this.projectList;
     }
 
 }
