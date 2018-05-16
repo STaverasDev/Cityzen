@@ -1,5 +1,8 @@
 package nyc.c4q.cityzenapp;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Handler;
@@ -8,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,10 +27,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.List;
+
 import nyc.c4q.cityzenapp.data.GetProjects;
 import nyc.c4q.cityzenapp.recview.ProjectAdapter;
 import nyc.c4q.cityzenapp.ui.CollectContract;
 import nyc.c4q.cityzenapp.ui.CollectPresenter;
+import nyc.c4q.cityzenapp.ui.ConfirmationFragment;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, CollectContract.View {
 
@@ -34,13 +43,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RecyclerView recyclerView;
     private CollectPresenter presenter;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private ProjectAdapter projectAdapter;
+    private LatLng curr;
     private final static int MAP_ZOOM = 24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        presenter = new CollectPresenter(this, new GetProjects());
+        presenter = new CollectPresenter(this,new GetProjects());
         presenter.start();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         showMap();
@@ -67,30 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1020);
-        } else {
-            mMap.setMyLocationEnabled(true);
-            fusedLocationProviderClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations, this can be null.
-                            double lat = location.getLatitude();
-                            double lng = location.getLongitude();
-                            LatLng curr = new LatLng(lat, lng);
-                            CameraPosition cameraPosition = new CameraPosition.Builder().target(curr).zoom(MAP_ZOOM).build();
-                            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Current Location"));
-                            if (location != null) {
-                                // Logic to handle location object
-                            }
-                        }
-                    });
-        }
-
+        getLocation();
     }
 
     @Override
@@ -104,8 +92,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void showProjects() {
         recyclerView = findViewById(R.id.projects_recview);
-        ProjectAdapter projectAdapter = new ProjectAdapter(presenter.getProjectList());
+        projectAdapter = new ProjectAdapter(presenter.getProjectList(),this);
         recyclerView.setAdapter(projectAdapter);
+
+    }
+
+    @Override
+    public LatLng getLocation() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1020);
+        } else {
+            mMap.setMyLocationEnabled(true);
+
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations, this can be null.
+                            double lat = location.getLatitude();
+                            double lng = location.getLongitude();
+                            curr = new LatLng(lat, lng);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curr,MAP_ZOOM ));
+
+                            if (location != null) {
+                                // Logic to handle location object
+                            }
+                        }
+                    });
+        }
+        return curr;
+    }
+
+    @Override
+    public void showDialog(String projectName) {
+        Toast.makeText(this, projectName, Toast.LENGTH_SHORT).show();
+        ConfirmationFragment fragment = new ConfirmationFragment();
+        fragment.show(getFragmentManager(),"ConfirmationFragment");
+
 
     }
 }

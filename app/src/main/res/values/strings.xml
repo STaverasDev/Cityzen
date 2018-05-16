@@ -3,4 +3,7 @@
     <string name="map_token">pk.eyJ1IjoidGF2ZXJhczMxOCIsImEiOiJjamd2aDBsdm4wc3BqMnFwODFqM2dudGplIn0.Ill1cmwcSaCCrpNTt8ABCg</string>
     <string name="title_activity_maps">Map</string>
     <string name="project_name_holder">Broken Streetlights</string>
+    <string name="dialog_message">Are you sure you want to record this location?</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
 </resources>

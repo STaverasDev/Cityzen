@@ -1,7 +1,10 @@
 package nyc.c4q.cityzenapp.ui;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -14,14 +17,11 @@ public class CollectPresenter implements CollectContract.Presenter {
     private List<Project> projectList;
     private GetProjects getProjects;
 
+
     public CollectPresenter(CollectContract.View view, GetProjects projects) {
         this.view = view;
         this.getProjects = projects;
 
-    }
-
-    public List<Project> getProjectList() {
-        return projectList;
     }
 
     @Override
@@ -37,8 +37,22 @@ public class CollectPresenter implements CollectContract.Presenter {
 
     }
 
+
+    @Override
+    public void storeLocation(LatLng latLng) {
+
+
+    }
+
     @Override
     public void addRecordToProjectCollection(String collection, Location location) {
 
+
     }
+
+    public List<Project> getProjectList() {
+        return projectList;
+    }
+
+
 }
