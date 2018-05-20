@@ -45,7 +45,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient fusedLocationProviderClient;
     private ProjectAdapter projectAdapter;
     private LatLng curr;
-    private final static int MAP_ZOOM = 24;
+    private Double lat;
+    private Double lng;
+    private final static int MAP_ZOOM = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,8 +112,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         @Override
                         public void onSuccess(Location location) {
                             // Got last known location. In some rare situations, this can be null.
-                            double lat = location.getLatitude();
-                            double lng = location.getLongitude();
+                            lat = location.getLatitude();
+                            lng = location.getLongitude();
                             curr = new LatLng(lat, lng);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curr,MAP_ZOOM ));
 
@@ -128,6 +130,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void showDialog(String projectName) {
         Toast.makeText(this, projectName, Toast.LENGTH_SHORT).show();
         ConfirmationFragment fragment = new ConfirmationFragment();
+
+        Bundle args = new Bundle();
+        args.putString("project",projectName);
+        args.putDouble("lat",lat);
+        args.putDouble("long",lng);
+
+        fragment.setArguments(args);
         fragment.show(getFragmentManager(),"ConfirmationFragment");
 
 

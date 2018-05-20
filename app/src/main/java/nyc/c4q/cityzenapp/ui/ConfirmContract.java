@@ -10,6 +10,9 @@ public interface ConfirmContract {
     }
 
     interface Presenter{
-        void storeRecord(String projectName, LatLng location);
+        void start();
+        void setProjectName(String projectName);
+        void setLocation(LatLng location);
+        void storeRecord();
     }
 }

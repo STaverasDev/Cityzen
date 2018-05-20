@@ -30,10 +30,10 @@ public class GetProjects {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Project project = new Project();
                                 project.setImg(document.get("img").toString());
-                                Log.d(TAG, document.get("img").toString());
+                                project.setCollection_name(document.get("collection_name").toString());
                                 project.setName(document.get("name").toString());
                                 projectList.add(project);
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+
                             }
                             populateList(projectList);
 

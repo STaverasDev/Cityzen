@@ -15,16 +15,29 @@ public class ConfirmationFragment extends DialogFragment {
     private ConfirmPresenter presenter;
     private String projectName;
     private LatLng location;
+    private Bundle args;
+
+
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         presenter = new ConfirmPresenter();
+        args = getArguments();
+
+        Double lat = args.getDouble("lat");
+        Double lng = args.getDouble("lng");
+        presenter.setProjectName(args.get("project").toString());
+        presenter.setLocation(new LatLng(lat, lng));
+
+
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.dialog_message)
                 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        presenter.storeRecord();
                         // FIRE ZE MISSILES!
                     }
                 })

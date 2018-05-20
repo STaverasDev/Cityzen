@@ -70,7 +70,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    activity.showDialog(project.getName());
+                    activity.showDialog(project.getCollection_name());
 
                 }
             });
